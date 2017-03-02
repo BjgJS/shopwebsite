@@ -8,8 +8,24 @@ var UserSchema = new mongoose.Schema({
         type: String, lowercase: true, unique: true
     },
     password: String,
-}, { timestamps: true});
+}, {timestamps: true});
 
-UserSchema.methods.validPassword = (password) = {
-
+UserSchema.methods.validPassword = (password, done) => {
+    bcrypt.compare(password, this.password, function (err, isMatch) {
+        done(err, isMatch);
+    });
 };
+
+UserSchema.pre('save', function (done) {
+    var self = this;
+    if (!self.isModified('password')) {
+        return done();
+    }
+    bcrypt.hash(self.password, null, null, (err, hashedPassword) => {
+        if (err) return done(err);
+        self.password = hashedPassword;
+        done();
+    });
+});
+
+mongoose.model('User', UserSchema);
