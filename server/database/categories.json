@@ -1,0 +1,54 @@
+{
+  "category": {
+    "name": "root",
+    "children": [
+      {
+        "name": "Phụ kiện điện thoại",
+        "children": [
+          {
+            "name": "Iphone",
+            "children": [
+              {
+                "name": "Iphone 2",
+                "children": []
+              },
+              {
+                "name": "Iphone 3",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "Android",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "Thời trang",
+        "children": [
+          {
+            "name": "Quần sịp",
+            "children": [
+              {
+                "name": "Sịp nam",
+                "children": []
+              },
+              {
+                "name": "Sịp nữ",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "Quần âu nam",
+            "children": []
+          },
+          {
+            "name": "Váy công sở"
+          }
+        ]
+      }
+    ]
+  }
+}

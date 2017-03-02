@@ -14,10 +14,15 @@ CategorySchema.pre('save', function (done) {
     done();
 });
 
+CategorySchema.pre('find', function (done) {
+    this.populate('children');
+    done();
+});
+
 CategorySchema.methods.toSimpleJSON = function () {
     const toSimpleJson = function (category) {
         let result = { name: category.name, children: [] };
-        if (category.children.length > 0) {
+        if (category.children && category.children.length > 0) {
             let json = [];
             category.children.forEach(c => {
                 json.push(toSimpleJson(c));

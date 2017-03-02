@@ -6,12 +6,14 @@ var Category = mongoose.model('Category');
  * GET all categories
  */
 router.get('/', function (req, res, next) {
-    Category.find().then(function (categories) {
-        if (!categories) return res.sendStatus(404);
-        return res.json({
-            categories: categories
-        });
-    }).catch(next);
+    Category.find({level: 0})
+        .then(function (categories) {
+            if (!categories) return res.sendStatus(404);
+            return res.json({
+                categories: categories.map(c => c.toSimpleJSON())
+            });
+        })
+        .catch(next);
 });
 
 /**
@@ -23,7 +25,7 @@ router.post('/', function (req, res, next) {
         if (category.children && category.children.length > 0) {
             var _promises = [];
             category.children.forEach(c => {
-                 _promises.push(saveCategory(c, level + 1));
+                _promises.push(saveCategory(c, level + 1));
             });
             return Promise.all(_promises).then(ids => {
                 category.children = ids;

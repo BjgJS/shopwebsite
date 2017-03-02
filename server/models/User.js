@@ -7,10 +7,10 @@ var UserSchema = new mongoose.Schema({
     email: {
         type: String, lowercase: true, unique: true
     },
-    password: String,
+    password: { type: String, required: true },
 }, {timestamps: true});
 
-UserSchema.methods.validPassword = (password, done) => {
+UserSchema.methods.validPassword = function(password, done) {
     bcrypt.compare(password, this.password, function (err, isMatch) {
         done(err, isMatch);
     });
@@ -27,5 +27,17 @@ UserSchema.pre('save', function (done) {
         done();
     });
 });
+
+UserSchema.methods.generateJWT = function () {
+    // TODO: generate token
+    return "TOKEN";
+};
+
+UserSchema.methods.toAuthJSON = function () {
+    return {
+        username: this.username,
+        token: this.generateJWT()
+    };
+};
 
 mongoose.model('User', UserSchema);
