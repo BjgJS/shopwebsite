@@ -19,21 +19,23 @@ router.get('/', function (req, res, next) {
  * authorized user only
  */
 router.post('/', function (req, res, next) {
-    const saveCategory = (category) => {
-        if (category.children.length > 0) {
+    const saveCategory = (category, level = 0) => {
+        if (category.children && category.children.length > 0) {
             var _promises = [];
             category.children.forEach(c => {
-                 _promises.push(saveCategory(c));
+                 _promises.push(saveCategory(c, level + 1));
             });
             return Promise.all(_promises).then(ids => {
                 category.children = ids;
+                category.level = level;
                 return category;
             }).then(c => new Category(c).save());
         }
+        category.level = level;
         return new Category(category).save();
     };
 
-    return saveCategory(req.body.category)
+    return saveCategory(req.body.category, -1)
         .then((category) => res.json({category: category.toSimpleJSON()}))
         .catch(next);
 });
