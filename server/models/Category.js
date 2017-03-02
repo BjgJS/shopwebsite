@@ -29,6 +29,21 @@ CategorySchema.pre('save', function (done) {
     done();
 });
 
+CategorySchema.methods.toSimpleJSON = function () {
+    const toSimpleJson = function (category) {
+        let result = { name: category.name, children: [] };
+        if (category.children.length > 0) {
+            let json = [];
+            category.children.forEach(c => {
+                json.push(toSimpleJson(c));
+            });
+            result.children = json;
+        }
+        return result;
+    };
+    return toSimpleJson(this);
+};
+
 module.exports = function () {
     mongoose.model('Category', CategorySchema);
 };

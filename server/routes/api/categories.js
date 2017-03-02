@@ -33,7 +33,9 @@ router.post('/', function (req, res, next) {
         return new Category(category).save();
     };
 
-    return saveCategory(req.body.category).then((category) => res.json({category: category}));
+    return saveCategory(req.body.category)
+        .then((category) => res.json({category: category.toSimpleJSON()}))
+        .catch(next);
 });
 
 
