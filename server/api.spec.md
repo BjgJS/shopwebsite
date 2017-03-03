@@ -31,3 +31,6 @@
         }
     ]
     ```
+
+##Product resource
+* Sample request

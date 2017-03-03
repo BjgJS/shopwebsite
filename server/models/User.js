@@ -1,5 +1,8 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bcrypt-nodejs')
+var bcrypt = require('bcrypt-nodejs');
+var jwt = require('jsonwebtoken');
+var secret = process.env.APP_SECRET_KEY;
+
 var UserSchema = new mongoose.Schema({
     username: {
         type: String, lowercase: true, unique: true
@@ -29,8 +32,14 @@ UserSchema.pre('save', function (done) {
 });
 
 UserSchema.methods.generateJWT = function () {
-    // TODO: generate token
-    return "TOKEN";
+    var today = new Date();
+    var exp = new Date(today);
+    exp.setDate(today.getDate() + 60);
+    return jwt.sign({
+        id: this._id,
+        username: this.username,
+        exp: parseInt(exp.getTime() / 1000)
+    }, secret);
 };
 
 UserSchema.methods.toAuthJSON = function () {

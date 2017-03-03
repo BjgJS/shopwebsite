@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
 var router = require('express').Router();
 var Category = mongoose.model('Category');
-
+var auth = require('../../shared/auth');
 /**
  * GET all categories
  */
-router.get('/', function (req, res, next) {
+router.get('/',auth.required, function (req, res, next) {
     Category.find({level: 0})
         .then(function (categories) {
             if (!categories) return res.sendStatus(404);
