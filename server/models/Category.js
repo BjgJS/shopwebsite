@@ -5,7 +5,7 @@ var CategorySchema = new mongoose.Schema({
     name: {type: String, required: true, unique: true},
     slug: {type: String, unique: true},
     display_flag: {type: Boolean, default: true},
-    level: { type: Number, default: 0 },
+    level: {type: Number, default: 0},
     children: [{type: mongoose.Schema.Types.ObjectId, ref: 'Category'}]
 }, {timestamp: true});
 
@@ -21,7 +21,7 @@ CategorySchema.pre('find', function (done) {
 
 CategorySchema.methods.toSimpleJSON = function () {
     const toSimpleJson = function (category) {
-        let result = { name: category.name, children: [] };
+        let result = {name: category.name, children: []};
         if (category.children && category.children.length > 0) {
             let json = [];
             category.children.forEach(c => {
@@ -34,6 +34,4 @@ CategorySchema.methods.toSimpleJSON = function () {
     return toSimpleJson(this);
 };
 
-module.exports = function () {
-    mongoose.model('Category', CategorySchema);
-};
+mongoose.model('Category', CategorySchema);
