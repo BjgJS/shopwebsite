@@ -1,6 +1,5 @@
 import React from 'react';
 import {Link} from 'react-router';
-import classnames from 'classnames';
 
 class Sidebar extends React.Component {
 

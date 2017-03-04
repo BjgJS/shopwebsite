@@ -1,22 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Router, Route, IndexRoute, browserHistory} from 'react-router';
+import {Router, browserHistory} from 'react-router';
+import {Provider} from 'react-redux';
+import {syncHistoryWithStore} from 'react-router-redux';
 
-/**
- * import components
- */
-import App from './components/App';
-import Category from './components/Category';
-import Home from './components/Home';
+import configureStore from './store';
+import routes from './routes';
+
+const store = configureStore();
+const history = syncHistoryWithStore(browserHistory, store);
 
 ReactDOM.render(
     (
-        <Router history={browserHistory}>
-            <Route path="/" component={App}>
-                <IndexRoute component={Home} />
-                <Route path="categories" component={Category} />
-            </Route>
-        </Router>
+        <Provider store={store}>
+            <Router history={history} routes={routes} />
+        </Provider>
     ),
     document.getElementById('root')
 );
