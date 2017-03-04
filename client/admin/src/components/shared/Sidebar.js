@@ -1,6 +1,13 @@
 import React from 'react';
+import {Link} from 'react-router';
+import classnames from 'classnames';
 
 class Sidebar extends React.Component {
+
+    getStyleForPath(path) {
+        return location.pathname === path ? 'active': '';
+    }
+
     render() {
         return (
             <aside className="main-sidebar">
@@ -31,20 +38,20 @@ class Sidebar extends React.Component {
                     {/* sidebar menu: : style can be found in sidebar.less */}
                     <ul className="sidebar-menu">
                         <li className="header">MAIN NAVIGATION</li>
-                        <li className="active">
-                            <a href="widgets.html">
+                        <li className={this.getStyleForPath('/')}>
+                            <Link to="/" className="">
                                 <i className="fa fa-th"></i> <span>Home</span>
-                            </a>
+                            </Link>
                         </li>
-                        <li className="">
-                            <a href="widgets.html">
+                        <li className={this.getStyleForPath('/categories')}>
+                            <Link to="categories">
                                 <i className="fa fa-th"></i> <span>Category</span>
-                            </a>
+                            </Link>
                         </li>
-                        <li className="">
-                            <a href="widgets.html">
+                        <li className={this.getStyleForPath('/products')}>
+                            <Link to="products">
                                 <i className="fa fa-th"></i> <span>Product</span>
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </section>

@@ -1,20 +1,13 @@
 import React from 'react';
-
+import PageHeader from '../shared/PageHeader';
 class Home extends React.Component {
     render() {
         return (
             <div>
-                {/* Content Header (Page header) */}
-                <section className="content-header">
-                    <h1>
-                        Dashboard
-                        <small>Version 2.0</small>
-                    </h1>
-                    <ol className="breadcrumb">
-                        <li><a href="#"><i className="fa fa-dashboard" /> Home</a></li>
-                        <li className="active">Dashboard</li>
-                    </ol>
-                </section>
+                <PageHeader
+                    pageTitle="Dashboard"
+                    pageSubTitle="v2.0"
+                />
                 {/* Main content */}
                 <section className="content">
                     {/* Info boxes */}
