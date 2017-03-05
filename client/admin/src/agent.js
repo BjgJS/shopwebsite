@@ -33,7 +33,14 @@ const Categories = {
     }
 };
 
+const Products = {
+    all: () => {
+        return requests.get(`/products`);
+    }
+}
+
 export default {
     Categories,
+    Products,
     setToken: _token => token = _token
 };

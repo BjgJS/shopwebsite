@@ -3,9 +3,11 @@ import {
 routerReducer
 } from 'react-router-redux';
 import categories from './categories';
+import products from './products';
 const rootReducer = combineReducers({
     routing: routerReducer,
-    categories
+    categories,
+    products
 });
 
 export default rootReducer;
