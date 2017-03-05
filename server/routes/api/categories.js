@@ -2,16 +2,36 @@ var mongoose = require('mongoose');
 var router = require('express').Router();
 var Category = mongoose.model('Category');
 var auth = require('../../shared/auth');
+
+router.param('category', function (req, res, next, slug) {
+    Category.findOne({slug: slug})
+        .then(category => {
+            if (!category) return res.sendStatus(404);
+            req.category = category;
+            return next();
+        })
+        .catch(next);
+});
+
 /**
  * GET all categories
  */
 router.get('/', function (req, res, next) {
-    Category.find({level: 0})
-        .then(function (categories) {
+    const nested = req.query.mode !== 'flatten';
+    const level = {level: nested ? 0 : {$gt: -1}};
+    let query = Category.find(level);
+    if (!nested) query = query.populate('parent', '-_id name slug');
+    query.then(function (categories) {
             if (!categories) return res.sendStatus(404);
-            return res.json({
-                categories: categories.map(c => c.toSimpleJSON())
-            });
+            if (nested) {
+                return res.json({
+                    categories: categories.map(c => c.toNestedJSON())
+                });
+            } else {
+                return res.json({
+                    categories: categories.map(c => c.toSimpleJSON())
+                });
+            }
         })
         .catch(next);
 });
@@ -38,9 +58,21 @@ router.post('/', function (req, res, next) {
     };
 
     return saveCategory(req.body.category, -1)
-        .then((category) => res.json({category: category.toSimpleJSON()}))
+        .then((category) => res.json({category: category.toNestedJSON()}))
         .catch(next);
 });
 
-
+router.put('/:category', function (req, res, next) {
+    const category = req.category;
+    category.name = req.body.name;
+    category.slug = req.body.slug || category.slug;
+    category.displayFlag = req.body.displayFlag;
+    category.save()
+        .then(function (c) {
+            return res.json({
+                category: c.toSimpleJSON()
+            });
+        })
+        .catch(next);
+});
 module.exports = router;

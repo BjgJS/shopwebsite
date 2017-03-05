@@ -4,34 +4,59 @@ var slug = require('slug');
 var CategorySchema = new mongoose.Schema({
     name: {type: String, required: true, unique: true},
     slug: {type: String, unique: true},
-    display_flag: {type: Boolean, default: true},
+    displayFlag: {type: Boolean, default: true},
     level: {type: Number, default: 0},
-    children: [{type: mongoose.Schema.Types.ObjectId, ref: 'Category'}]
+    children: [{type: mongoose.Schema.Types.ObjectId, ref: 'Category'}],
+    parent: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'}
 }, {timestamp: true});
 
-CategorySchema.pre('save', function (done) {
-    this.slug = slug(this.name);
-    done();
-});
-
 CategorySchema.pre('find', function (done) {
-    this.populate('children');
+    this.populate(['children']);
     done();
 });
 
-CategorySchema.methods.toSimpleJSON = function () {
-    const toSimpleJson = function (category) {
-        let result = {name: category.name, children: []};
+CategorySchema.pre('save', function (done) {
+    if (!this.slug)
+        this.slug = slug(this.name);
+    done();
+});
+CategorySchema.post('save', function (done) {
+    const _p = []
+    this.children.forEach(c => {
+        c.parent = this;
+        _p.push(c.save());
+    });
+    Promise.all(_p).then(done);
+});
+
+CategorySchema.methods.toNestedJSON = function () {
+    const toNestedJson = function (category) {
+        let result = {
+            name: category.name,
+            level: category.level,
+            slug: category.slug,
+            displayFlag: category.displayFlag
+        };
         if (category.children && category.children.length > 0) {
+            
             let json = [];
             category.children.forEach(c => {
-                json.push(toSimpleJson(c));
+                json.push(toNestedJson(c));
             });
             result.children = json;
         }
         return result;
     };
-    return toSimpleJson(this);
+    return toNestedJson(this);
 };
 
+CategorySchema.methods.toSimpleJSON = function () {
+    return {
+        name: this.name,
+        slug: this.slug,
+        displayFlag: this.displayFlag,
+        level: this.level,
+        parent: this.parent
+    }
+};
 mongoose.model('Category', CategorySchema);

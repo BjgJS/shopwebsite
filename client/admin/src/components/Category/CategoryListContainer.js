@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 import CategoryList from './CategoryList';
 
 import {
-    fetchAllCategories
+    fetchAllCategories,
+    selectCategory
 } from '../../actions';
 
 class CategoryListContainer extends React.Component {
@@ -13,19 +14,27 @@ class CategoryListContainer extends React.Component {
     }
 
     render() {
-        const {categories, loading}  = this.props;
-        return <CategoryList categories={categories} loading={loading}/>
+        const {categories, loading, onSelectedCategoryChanged, active}  = this.props;
+        return (
+            <CategoryList
+                categories={categories}
+                loading={loading}
+                active={active}
+                onSelectedCategoryChanged={onSelectedCategoryChanged}
+            />
+        )
     }
 }
 
 const mapStateToProps = state => ({
     categories: state.categories.get('items'),
-    loading: state.categories.get('loading')
-
+    loading: state.categories.get('loading'),
+    active: state.categories.get('active')
 });
 
 const mapDispatchToProps = dispatch => ({
-    onLoad: () => dispatch(fetchAllCategories())
+    onLoad: () => dispatch(fetchAllCategories(true)),
+    onSelectedCategoryChanged: (category) => dispatch(selectCategory(category))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoryListContainer);

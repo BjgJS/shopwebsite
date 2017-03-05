@@ -22,7 +22,15 @@ const requests = {
 };
 
 const Categories = {
-    all: () => requests.get('/categories')
+    all: (flatten = false) => {
+        let url = '/categories';
+        if (flatten)
+            url += '?mode=flatten';
+        return requests.get(url);
+    },
+    update: (slug, category) => {
+        return requests.put(`/categories/${slug}`, category);
+    }
 };
 
 export default {
