@@ -15,7 +15,7 @@ class Sidebar extends React.Component {
                     {/* Sidebar user panel */}
                     <div className="user-panel">
                         <div className="pull-left image">
-                            <img src="dist/img/user2-160x160.jpg" className="img-circle" alt="description"/>
+                            <img src="/dist/img/user2-160x160.jpg" className="img-circle" alt="description"/>
                         </div>
                         <div className="pull-left info">
                             <p>Alexander Pierce</p>
@@ -43,7 +43,7 @@ class Sidebar extends React.Component {
                             </Link>
                         </li>
                         <li className={this.getStyleForPath('/categories')}>
-                            <Link to="categories">
+                            <Link to="/categories">
                                 <i className="fa fa-th"></i> <span>Category</span>
                             </Link>
                         </li>

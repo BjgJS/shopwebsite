@@ -27,7 +27,7 @@ class ProductList extends React.Component {
                                         <td>{i + 1}</td>
                                         <td className="attachment-block">
                                             <img className="attachment-img"
-                                                 src={"product_images/" + p.getIn(['images', 'avatar', 'imageName'])}
+                                                 src={"/product_images/" + p.getIn(['images', 'avatar', 'imageName'])}
                                                  alt={p.getIn(['images', 'avatar', 'description'])}
                                             />
                                         </td>
