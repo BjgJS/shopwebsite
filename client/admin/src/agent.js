@@ -36,8 +36,11 @@ const Categories = {
 const Products = {
     all: () => {
         return requests.get(`/products`);
+    },
+    bySlug: (slug) => {
+        return requests.get(`/products/${slug}`);
     }
-}
+};
 
 export default {
     Categories,

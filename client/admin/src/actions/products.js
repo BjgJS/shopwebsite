@@ -13,3 +13,17 @@ export function fetchAllProducts() {
             });
     }
 }
+
+export function fetchProductBySlug(slug) {
+    return dispatch => {
+        dispatch({type: 'GET_PRODUCT_START'});
+        agent.Products.bySlug(slug)
+            .then(res => {
+                dispatch({type: 'GET_PRODUCT_SUCCESS', payload: res.product});
+            })
+            .catch(err => {
+                console.log(err.response.body);
+                dispatch({type: 'GET_PRODUCT_ERROR', payload: err.response.body});
+            });
+    }
+}

@@ -2,6 +2,16 @@ var mongoose = require('mongoose');
 var router = require('express').Router();
 var Product = mongoose.model('Product');
 
+router.param('slug', function(req, res, next, slug) {
+    Product.findOne({slug: slug})
+        .then(product => {
+            if (!product) return res.status(404).json({errors: {message: 'Not found', code: 404}});
+            req.product = product;
+            next();
+        })
+        .catch(next);
+});
+
 /**
  * GET all products
  */
@@ -14,6 +24,12 @@ router.get('/', function (req, res, next) {
             })
         })
         .catch(next);
+});
+
+router.get('/:slug', function (req, res) {
+    return res.json({
+        product: req.product
+    });
 });
 
 /**
