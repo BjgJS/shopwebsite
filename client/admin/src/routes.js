@@ -1,7 +1,7 @@
 import React from 'react';
 import {Route, IndexRoute} from 'react-router';
 
-import App from './components/App';
+import App from './containers/App';
 import Category from './components/Category';
 import Home from './components/Home';
 import Product from './components/Product';
